@@ -71,7 +71,7 @@ endif()
 
 
 if(ENABLE_VIRTUAL_OPERATIONS) # it could be set to 0/1 or ON/OFF
-    set(ENABLE_VIRTUAL_OPERATIONS_ARG "--enable-virtual-operations")
+    set(ENABLE_VIRTUAL_OPERATIONS_ARG "--enableVirtualOperations")
 else()
     set(ENABLE_VIRTUAL_OPERATIONS_ARG "")
 endif()
