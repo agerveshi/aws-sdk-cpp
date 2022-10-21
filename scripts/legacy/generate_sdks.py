@@ -73,11 +73,11 @@ def discover_all_available_models(discovery_path):
             if service_name in serviceNameRemaps:
                 service_name = serviceNameRemaps[service_name]
 
-            sdk = {'service_name': service_name, 'apiVersion': match.group(2), 'filePath': join(discovery_path, file)}
+            sdk = {'serviceName': service_name, 'apiVersion': match.group(2), 'filePath': join(discovery_path, file)}
             sdks['{}-{}'.format(sdk['service_name'], sdk['apiVersion'])] = sdk
 
             if service_name == "s3":
-                s3crt = {'service_name': "s3-crt", 'apiVersion': sdk['apiVersion'], 'filePath': sdk['filePath']}
+                s3crt = {'serviceName': "s3-crt", 'apiVersion': sdk['apiVersion'], 'filePath': sdk['filePath']}
                 sdks['s3-crt-{}'.format(s3crt['apiVersion'])] = s3crt
 
     return sdks
