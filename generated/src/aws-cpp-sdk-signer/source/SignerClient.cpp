@@ -24,6 +24,7 @@
 #include <aws/signer/model/AddProfilePermissionRequest.h>
 #include <aws/signer/model/CancelSigningProfileRequest.h>
 #include <aws/signer/model/DescribeSigningJobRequest.h>
+#include <aws/signer/model/GetRevocationStatusRequest.h>
 #include <aws/signer/model/GetSigningPlatformRequest.h>
 #include <aws/signer/model/GetSigningProfileRequest.h>
 #include <aws/signer/model/ListProfilePermissionsRequest.h>
@@ -35,6 +36,7 @@
 #include <aws/signer/model/RemoveProfilePermissionRequest.h>
 #include <aws/signer/model/RevokeSignatureRequest.h>
 #include <aws/signer/model/RevokeSigningProfileRequest.h>
+#include <aws/signer/model/SignPayloadRequest.h>
 #include <aws/signer/model/StartSigningJobRequest.h>
 #include <aws/signer/model/TagResourceRequest.h>
 #include <aws/signer/model/UntagResourceRequest.h>
@@ -146,6 +148,7 @@ SignerClient::SignerClient(const std::shared_ptr<AWSCredentialsProvider>& creden
     /* End of legacy constructors due deprecation */
 SignerClient::~SignerClient()
 {
+  ShutdownSdkClient(this, -1);
 }
 
 std::shared_ptr<SignerEndpointProviderBase>& SignerClient::accessEndpointProvider()
@@ -168,6 +171,7 @@ void SignerClient::OverrideEndpoint(const Aws::String& endpoint)
 
 AddProfilePermissionOutcome SignerClient::AddProfilePermission(const AddProfilePermissionRequest& request) const
 {
+  AWS_OPERATION_GUARD(AddProfilePermission);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, AddProfilePermission, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ProfileNameHasBeenSet())
   {
@@ -184,6 +188,7 @@ AddProfilePermissionOutcome SignerClient::AddProfilePermission(const AddProfileP
 
 CancelSigningProfileOutcome SignerClient::CancelSigningProfile(const CancelSigningProfileRequest& request) const
 {
+  AWS_OPERATION_GUARD(CancelSigningProfile);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CancelSigningProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ProfileNameHasBeenSet())
   {
@@ -199,6 +204,7 @@ CancelSigningProfileOutcome SignerClient::CancelSigningProfile(const CancelSigni
 
 DescribeSigningJobOutcome SignerClient::DescribeSigningJob(const DescribeSigningJobRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeSigningJob);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeSigningJob, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.JobIdHasBeenSet())
   {
@@ -212,8 +218,46 @@ DescribeSigningJobOutcome SignerClient::DescribeSigningJob(const DescribeSigning
   return DescribeSigningJobOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
 }
 
+GetRevocationStatusOutcome SignerClient::GetRevocationStatus(const GetRevocationStatusRequest& request) const
+{
+  AWS_OPERATION_GUARD(GetRevocationStatus);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetRevocationStatus, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.SignatureTimestampHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetRevocationStatus", "Required field: SignatureTimestamp, is not set");
+    return GetRevocationStatusOutcome(Aws::Client::AWSError<SignerErrors>(SignerErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [SignatureTimestamp]", false));
+  }
+  if (!request.PlatformIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetRevocationStatus", "Required field: PlatformId, is not set");
+    return GetRevocationStatusOutcome(Aws::Client::AWSError<SignerErrors>(SignerErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [PlatformId]", false));
+  }
+  if (!request.ProfileVersionArnHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetRevocationStatus", "Required field: ProfileVersionArn, is not set");
+    return GetRevocationStatusOutcome(Aws::Client::AWSError<SignerErrors>(SignerErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [ProfileVersionArn]", false));
+  }
+  if (!request.JobArnHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetRevocationStatus", "Required field: JobArn, is not set");
+    return GetRevocationStatusOutcome(Aws::Client::AWSError<SignerErrors>(SignerErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [JobArn]", false));
+  }
+  if (!request.CertificateHashesHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetRevocationStatus", "Required field: CertificateHashes, is not set");
+    return GetRevocationStatusOutcome(Aws::Client::AWSError<SignerErrors>(SignerErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [CertificateHashes]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, GetRevocationStatus, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  auto addPrefixErr = endpointResolutionOutcome.GetResult().AddPrefixIfMissing("verification.");
+  AWS_CHECK(SERVICE_NAME, !addPrefixErr, addPrefixErr->GetMessage(), GetRevocationStatusOutcome(addPrefixErr.value()));
+  endpointResolutionOutcome.GetResult().AddPathSegments("/revocations");
+  return GetRevocationStatusOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
 GetSigningPlatformOutcome SignerClient::GetSigningPlatform(const GetSigningPlatformRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetSigningPlatform);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetSigningPlatform, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.PlatformIdHasBeenSet())
   {
@@ -229,6 +273,7 @@ GetSigningPlatformOutcome SignerClient::GetSigningPlatform(const GetSigningPlatf
 
 GetSigningProfileOutcome SignerClient::GetSigningProfile(const GetSigningProfileRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetSigningProfile);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetSigningProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ProfileNameHasBeenSet())
   {
@@ -244,6 +289,7 @@ GetSigningProfileOutcome SignerClient::GetSigningProfile(const GetSigningProfile
 
 ListProfilePermissionsOutcome SignerClient::ListProfilePermissions(const ListProfilePermissionsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListProfilePermissions);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListProfilePermissions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ProfileNameHasBeenSet())
   {
@@ -260,6 +306,7 @@ ListProfilePermissionsOutcome SignerClient::ListProfilePermissions(const ListPro
 
 ListSigningJobsOutcome SignerClient::ListSigningJobs(const ListSigningJobsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListSigningJobs);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListSigningJobs, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListSigningJobs, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -269,6 +316,7 @@ ListSigningJobsOutcome SignerClient::ListSigningJobs(const ListSigningJobsReques
 
 ListSigningPlatformsOutcome SignerClient::ListSigningPlatforms(const ListSigningPlatformsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListSigningPlatforms);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListSigningPlatforms, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListSigningPlatforms, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -278,6 +326,7 @@ ListSigningPlatformsOutcome SignerClient::ListSigningPlatforms(const ListSigning
 
 ListSigningProfilesOutcome SignerClient::ListSigningProfiles(const ListSigningProfilesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListSigningProfiles);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListSigningProfiles, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListSigningProfiles, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -287,6 +336,7 @@ ListSigningProfilesOutcome SignerClient::ListSigningProfiles(const ListSigningPr
 
 ListTagsForResourceOutcome SignerClient::ListTagsForResource(const ListTagsForResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListTagsForResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTagsForResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -302,6 +352,7 @@ ListTagsForResourceOutcome SignerClient::ListTagsForResource(const ListTagsForRe
 
 PutSigningProfileOutcome SignerClient::PutSigningProfile(const PutSigningProfileRequest& request) const
 {
+  AWS_OPERATION_GUARD(PutSigningProfile);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, PutSigningProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ProfileNameHasBeenSet())
   {
@@ -317,6 +368,7 @@ PutSigningProfileOutcome SignerClient::PutSigningProfile(const PutSigningProfile
 
 RemoveProfilePermissionOutcome SignerClient::RemoveProfilePermission(const RemoveProfilePermissionRequest& request) const
 {
+  AWS_OPERATION_GUARD(RemoveProfilePermission);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, RemoveProfilePermission, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ProfileNameHasBeenSet())
   {
@@ -344,6 +396,7 @@ RemoveProfilePermissionOutcome SignerClient::RemoveProfilePermission(const Remov
 
 RevokeSignatureOutcome SignerClient::RevokeSignature(const RevokeSignatureRequest& request) const
 {
+  AWS_OPERATION_GUARD(RevokeSignature);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, RevokeSignature, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.JobIdHasBeenSet())
   {
@@ -360,6 +413,7 @@ RevokeSignatureOutcome SignerClient::RevokeSignature(const RevokeSignatureReques
 
 RevokeSigningProfileOutcome SignerClient::RevokeSigningProfile(const RevokeSigningProfileRequest& request) const
 {
+  AWS_OPERATION_GUARD(RevokeSigningProfile);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, RevokeSigningProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ProfileNameHasBeenSet())
   {
@@ -374,8 +428,19 @@ RevokeSigningProfileOutcome SignerClient::RevokeSigningProfile(const RevokeSigni
   return RevokeSigningProfileOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_PUT, Aws::Auth::SIGV4_SIGNER));
 }
 
+SignPayloadOutcome SignerClient::SignPayload(const SignPayloadRequest& request) const
+{
+  AWS_OPERATION_GUARD(SignPayload);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, SignPayload, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, SignPayload, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/signing-jobs/with-payload");
+  return SignPayloadOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
 StartSigningJobOutcome SignerClient::StartSigningJob(const StartSigningJobRequest& request) const
 {
+  AWS_OPERATION_GUARD(StartSigningJob);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, StartSigningJob, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, StartSigningJob, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -385,6 +450,7 @@ StartSigningJobOutcome SignerClient::StartSigningJob(const StartSigningJobReques
 
 TagResourceOutcome SignerClient::TagResource(const TagResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(TagResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, TagResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -400,6 +466,7 @@ TagResourceOutcome SignerClient::TagResource(const TagResourceRequest& request) 
 
 UntagResourceOutcome SignerClient::UntagResource(const UntagResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(UntagResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UntagResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {

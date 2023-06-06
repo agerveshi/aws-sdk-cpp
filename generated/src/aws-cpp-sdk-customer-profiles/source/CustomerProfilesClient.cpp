@@ -22,9 +22,11 @@
 #include <aws/customer-profiles/CustomerProfilesErrorMarshaller.h>
 #include <aws/customer-profiles/CustomerProfilesEndpointProvider.h>
 #include <aws/customer-profiles/model/AddProfileKeyRequest.h>
+#include <aws/customer-profiles/model/CreateCalculatedAttributeDefinitionRequest.h>
 #include <aws/customer-profiles/model/CreateDomainRequest.h>
 #include <aws/customer-profiles/model/CreateIntegrationWorkflowRequest.h>
 #include <aws/customer-profiles/model/CreateProfileRequest.h>
+#include <aws/customer-profiles/model/DeleteCalculatedAttributeDefinitionRequest.h>
 #include <aws/customer-profiles/model/DeleteDomainRequest.h>
 #include <aws/customer-profiles/model/DeleteIntegrationRequest.h>
 #include <aws/customer-profiles/model/DeleteProfileRequest.h>
@@ -33,6 +35,8 @@
 #include <aws/customer-profiles/model/DeleteProfileObjectTypeRequest.h>
 #include <aws/customer-profiles/model/DeleteWorkflowRequest.h>
 #include <aws/customer-profiles/model/GetAutoMergingPreviewRequest.h>
+#include <aws/customer-profiles/model/GetCalculatedAttributeDefinitionRequest.h>
+#include <aws/customer-profiles/model/GetCalculatedAttributeForProfileRequest.h>
 #include <aws/customer-profiles/model/GetDomainRequest.h>
 #include <aws/customer-profiles/model/GetIdentityResolutionJobRequest.h>
 #include <aws/customer-profiles/model/GetIntegrationRequest.h>
@@ -42,6 +46,8 @@
 #include <aws/customer-profiles/model/GetWorkflowRequest.h>
 #include <aws/customer-profiles/model/GetWorkflowStepsRequest.h>
 #include <aws/customer-profiles/model/ListAccountIntegrationsRequest.h>
+#include <aws/customer-profiles/model/ListCalculatedAttributeDefinitionsRequest.h>
+#include <aws/customer-profiles/model/ListCalculatedAttributesForProfileRequest.h>
 #include <aws/customer-profiles/model/ListDomainsRequest.h>
 #include <aws/customer-profiles/model/ListIdentityResolutionJobsRequest.h>
 #include <aws/customer-profiles/model/ListIntegrationsRequest.h>
@@ -57,6 +63,7 @@
 #include <aws/customer-profiles/model/SearchProfilesRequest.h>
 #include <aws/customer-profiles/model/TagResourceRequest.h>
 #include <aws/customer-profiles/model/UntagResourceRequest.h>
+#include <aws/customer-profiles/model/UpdateCalculatedAttributeDefinitionRequest.h>
 #include <aws/customer-profiles/model/UpdateDomainRequest.h>
 #include <aws/customer-profiles/model/UpdateProfileRequest.h>
 
@@ -167,6 +174,7 @@ CustomerProfilesClient::CustomerProfilesClient(const std::shared_ptr<AWSCredenti
     /* End of legacy constructors due deprecation */
 CustomerProfilesClient::~CustomerProfilesClient()
 {
+  ShutdownSdkClient(this, -1);
 }
 
 std::shared_ptr<CustomerProfilesEndpointProviderBase>& CustomerProfilesClient::accessEndpointProvider()
@@ -189,6 +197,7 @@ void CustomerProfilesClient::OverrideEndpoint(const Aws::String& endpoint)
 
 AddProfileKeyOutcome CustomerProfilesClient::AddProfileKey(const AddProfileKeyRequest& request) const
 {
+  AWS_OPERATION_GUARD(AddProfileKey);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, AddProfileKey, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -203,8 +212,32 @@ AddProfileKeyOutcome CustomerProfilesClient::AddProfileKey(const AddProfileKeyRe
   return AddProfileKeyOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
 }
 
+CreateCalculatedAttributeDefinitionOutcome CustomerProfilesClient::CreateCalculatedAttributeDefinition(const CreateCalculatedAttributeDefinitionRequest& request) const
+{
+  AWS_OPERATION_GUARD(CreateCalculatedAttributeDefinition);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.DomainNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("CreateCalculatedAttributeDefinition", "Required field: DomainName, is not set");
+    return CreateCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [DomainName]", false));
+  }
+  if (!request.CalculatedAttributeNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("CreateCalculatedAttributeDefinition", "Required field: CalculatedAttributeName, is not set");
+    return CreateCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [CalculatedAttributeName]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/domains/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetDomainName());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/calculated-attributes/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetCalculatedAttributeName());
+  return CreateCalculatedAttributeDefinitionOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
 CreateDomainOutcome CustomerProfilesClient::CreateDomain(const CreateDomainRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateDomain);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateDomain, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -220,6 +253,7 @@ CreateDomainOutcome CustomerProfilesClient::CreateDomain(const CreateDomainReque
 
 CreateIntegrationWorkflowOutcome CustomerProfilesClient::CreateIntegrationWorkflow(const CreateIntegrationWorkflowRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateIntegrationWorkflow);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateIntegrationWorkflow, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -236,6 +270,7 @@ CreateIntegrationWorkflowOutcome CustomerProfilesClient::CreateIntegrationWorkfl
 
 CreateProfileOutcome CustomerProfilesClient::CreateProfile(const CreateProfileRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateProfile);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -250,8 +285,32 @@ CreateProfileOutcome CustomerProfilesClient::CreateProfile(const CreateProfileRe
   return CreateProfileOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
 }
 
+DeleteCalculatedAttributeDefinitionOutcome CustomerProfilesClient::DeleteCalculatedAttributeDefinition(const DeleteCalculatedAttributeDefinitionRequest& request) const
+{
+  AWS_OPERATION_GUARD(DeleteCalculatedAttributeDefinition);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.DomainNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("DeleteCalculatedAttributeDefinition", "Required field: DomainName, is not set");
+    return DeleteCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [DomainName]", false));
+  }
+  if (!request.CalculatedAttributeNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("DeleteCalculatedAttributeDefinition", "Required field: CalculatedAttributeName, is not set");
+    return DeleteCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [CalculatedAttributeName]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeleteCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/domains/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetDomainName());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/calculated-attributes/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetCalculatedAttributeName());
+  return DeleteCalculatedAttributeDefinitionOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_DELETE, Aws::Auth::SIGV4_SIGNER));
+}
+
 DeleteDomainOutcome CustomerProfilesClient::DeleteDomain(const DeleteDomainRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteDomain);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteDomain, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -267,6 +326,7 @@ DeleteDomainOutcome CustomerProfilesClient::DeleteDomain(const DeleteDomainReque
 
 DeleteIntegrationOutcome CustomerProfilesClient::DeleteIntegration(const DeleteIntegrationRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteIntegration);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteIntegration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -283,6 +343,7 @@ DeleteIntegrationOutcome CustomerProfilesClient::DeleteIntegration(const DeleteI
 
 DeleteProfileOutcome CustomerProfilesClient::DeleteProfile(const DeleteProfileRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteProfile);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -299,6 +360,7 @@ DeleteProfileOutcome CustomerProfilesClient::DeleteProfile(const DeleteProfileRe
 
 DeleteProfileKeyOutcome CustomerProfilesClient::DeleteProfileKey(const DeleteProfileKeyRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteProfileKey);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteProfileKey, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -315,6 +377,7 @@ DeleteProfileKeyOutcome CustomerProfilesClient::DeleteProfileKey(const DeletePro
 
 DeleteProfileObjectOutcome CustomerProfilesClient::DeleteProfileObject(const DeleteProfileObjectRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteProfileObject);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteProfileObject, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -331,6 +394,7 @@ DeleteProfileObjectOutcome CustomerProfilesClient::DeleteProfileObject(const Del
 
 DeleteProfileObjectTypeOutcome CustomerProfilesClient::DeleteProfileObjectType(const DeleteProfileObjectTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteProfileObjectType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteProfileObjectType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -353,6 +417,7 @@ DeleteProfileObjectTypeOutcome CustomerProfilesClient::DeleteProfileObjectType(c
 
 DeleteWorkflowOutcome CustomerProfilesClient::DeleteWorkflow(const DeleteWorkflowRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteWorkflow);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteWorkflow, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -375,6 +440,7 @@ DeleteWorkflowOutcome CustomerProfilesClient::DeleteWorkflow(const DeleteWorkflo
 
 GetAutoMergingPreviewOutcome CustomerProfilesClient::GetAutoMergingPreview(const GetAutoMergingPreviewRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetAutoMergingPreview);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetAutoMergingPreview, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -389,8 +455,62 @@ GetAutoMergingPreviewOutcome CustomerProfilesClient::GetAutoMergingPreview(const
   return GetAutoMergingPreviewOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
 }
 
+GetCalculatedAttributeDefinitionOutcome CustomerProfilesClient::GetCalculatedAttributeDefinition(const GetCalculatedAttributeDefinitionRequest& request) const
+{
+  AWS_OPERATION_GUARD(GetCalculatedAttributeDefinition);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.DomainNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetCalculatedAttributeDefinition", "Required field: DomainName, is not set");
+    return GetCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [DomainName]", false));
+  }
+  if (!request.CalculatedAttributeNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetCalculatedAttributeDefinition", "Required field: CalculatedAttributeName, is not set");
+    return GetCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [CalculatedAttributeName]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, GetCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/domains/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetDomainName());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/calculated-attributes/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetCalculatedAttributeName());
+  return GetCalculatedAttributeDefinitionOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
+GetCalculatedAttributeForProfileOutcome CustomerProfilesClient::GetCalculatedAttributeForProfile(const GetCalculatedAttributeForProfileRequest& request) const
+{
+  AWS_OPERATION_GUARD(GetCalculatedAttributeForProfile);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetCalculatedAttributeForProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.DomainNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetCalculatedAttributeForProfile", "Required field: DomainName, is not set");
+    return GetCalculatedAttributeForProfileOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [DomainName]", false));
+  }
+  if (!request.ProfileIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetCalculatedAttributeForProfile", "Required field: ProfileId, is not set");
+    return GetCalculatedAttributeForProfileOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [ProfileId]", false));
+  }
+  if (!request.CalculatedAttributeNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetCalculatedAttributeForProfile", "Required field: CalculatedAttributeName, is not set");
+    return GetCalculatedAttributeForProfileOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [CalculatedAttributeName]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, GetCalculatedAttributeForProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/domains/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetDomainName());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/profile/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetProfileId());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/calculated-attributes/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetCalculatedAttributeName());
+  return GetCalculatedAttributeForProfileOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
 GetDomainOutcome CustomerProfilesClient::GetDomain(const GetDomainRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetDomain);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetDomain, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -406,6 +526,7 @@ GetDomainOutcome CustomerProfilesClient::GetDomain(const GetDomainRequest& reque
 
 GetIdentityResolutionJobOutcome CustomerProfilesClient::GetIdentityResolutionJob(const GetIdentityResolutionJobRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetIdentityResolutionJob);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetIdentityResolutionJob, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -428,6 +549,7 @@ GetIdentityResolutionJobOutcome CustomerProfilesClient::GetIdentityResolutionJob
 
 GetIntegrationOutcome CustomerProfilesClient::GetIntegration(const GetIntegrationRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetIntegration);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetIntegration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -444,6 +566,7 @@ GetIntegrationOutcome CustomerProfilesClient::GetIntegration(const GetIntegratio
 
 GetMatchesOutcome CustomerProfilesClient::GetMatches(const GetMatchesRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetMatches);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetMatches, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -460,6 +583,7 @@ GetMatchesOutcome CustomerProfilesClient::GetMatches(const GetMatchesRequest& re
 
 GetProfileObjectTypeOutcome CustomerProfilesClient::GetProfileObjectType(const GetProfileObjectTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetProfileObjectType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetProfileObjectType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -482,6 +606,7 @@ GetProfileObjectTypeOutcome CustomerProfilesClient::GetProfileObjectType(const G
 
 GetProfileObjectTypeTemplateOutcome CustomerProfilesClient::GetProfileObjectTypeTemplate(const GetProfileObjectTypeTemplateRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetProfileObjectTypeTemplate);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetProfileObjectTypeTemplate, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.TemplateIdHasBeenSet())
   {
@@ -497,6 +622,7 @@ GetProfileObjectTypeTemplateOutcome CustomerProfilesClient::GetProfileObjectType
 
 GetWorkflowOutcome CustomerProfilesClient::GetWorkflow(const GetWorkflowRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetWorkflow);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetWorkflow, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -519,6 +645,7 @@ GetWorkflowOutcome CustomerProfilesClient::GetWorkflow(const GetWorkflowRequest&
 
 GetWorkflowStepsOutcome CustomerProfilesClient::GetWorkflowSteps(const GetWorkflowStepsRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetWorkflowSteps);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetWorkflowSteps, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -542,6 +669,7 @@ GetWorkflowStepsOutcome CustomerProfilesClient::GetWorkflowSteps(const GetWorkfl
 
 ListAccountIntegrationsOutcome CustomerProfilesClient::ListAccountIntegrations(const ListAccountIntegrationsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListAccountIntegrations);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListAccountIntegrations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListAccountIntegrations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -549,8 +677,50 @@ ListAccountIntegrationsOutcome CustomerProfilesClient::ListAccountIntegrations(c
   return ListAccountIntegrationsOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
 }
 
+ListCalculatedAttributeDefinitionsOutcome CustomerProfilesClient::ListCalculatedAttributeDefinitions(const ListCalculatedAttributeDefinitionsRequest& request) const
+{
+  AWS_OPERATION_GUARD(ListCalculatedAttributeDefinitions);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListCalculatedAttributeDefinitions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.DomainNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("ListCalculatedAttributeDefinitions", "Required field: DomainName, is not set");
+    return ListCalculatedAttributeDefinitionsOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [DomainName]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListCalculatedAttributeDefinitions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/domains/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetDomainName());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/calculated-attributes");
+  return ListCalculatedAttributeDefinitionsOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
+ListCalculatedAttributesForProfileOutcome CustomerProfilesClient::ListCalculatedAttributesForProfile(const ListCalculatedAttributesForProfileRequest& request) const
+{
+  AWS_OPERATION_GUARD(ListCalculatedAttributesForProfile);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListCalculatedAttributesForProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.DomainNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("ListCalculatedAttributesForProfile", "Required field: DomainName, is not set");
+    return ListCalculatedAttributesForProfileOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [DomainName]", false));
+  }
+  if (!request.ProfileIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("ListCalculatedAttributesForProfile", "Required field: ProfileId, is not set");
+    return ListCalculatedAttributesForProfileOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [ProfileId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListCalculatedAttributesForProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/domains/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetDomainName());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/profile/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetProfileId());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/calculated-attributes");
+  return ListCalculatedAttributesForProfileOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
 ListDomainsOutcome CustomerProfilesClient::ListDomains(const ListDomainsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListDomains);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListDomains, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListDomains, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -560,6 +730,7 @@ ListDomainsOutcome CustomerProfilesClient::ListDomains(const ListDomainsRequest&
 
 ListIdentityResolutionJobsOutcome CustomerProfilesClient::ListIdentityResolutionJobs(const ListIdentityResolutionJobsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListIdentityResolutionJobs);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListIdentityResolutionJobs, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -576,6 +747,7 @@ ListIdentityResolutionJobsOutcome CustomerProfilesClient::ListIdentityResolution
 
 ListIntegrationsOutcome CustomerProfilesClient::ListIntegrations(const ListIntegrationsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListIntegrations);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListIntegrations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -592,6 +764,7 @@ ListIntegrationsOutcome CustomerProfilesClient::ListIntegrations(const ListInteg
 
 ListProfileObjectTypeTemplatesOutcome CustomerProfilesClient::ListProfileObjectTypeTemplates(const ListProfileObjectTypeTemplatesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListProfileObjectTypeTemplates);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListProfileObjectTypeTemplates, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListProfileObjectTypeTemplates, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -601,6 +774,7 @@ ListProfileObjectTypeTemplatesOutcome CustomerProfilesClient::ListProfileObjectT
 
 ListProfileObjectTypesOutcome CustomerProfilesClient::ListProfileObjectTypes(const ListProfileObjectTypesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListProfileObjectTypes);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListProfileObjectTypes, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -617,6 +791,7 @@ ListProfileObjectTypesOutcome CustomerProfilesClient::ListProfileObjectTypes(con
 
 ListProfileObjectsOutcome CustomerProfilesClient::ListProfileObjects(const ListProfileObjectsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListProfileObjects);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListProfileObjects, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -633,6 +808,7 @@ ListProfileObjectsOutcome CustomerProfilesClient::ListProfileObjects(const ListP
 
 ListTagsForResourceOutcome CustomerProfilesClient::ListTagsForResource(const ListTagsForResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListTagsForResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTagsForResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -648,6 +824,7 @@ ListTagsForResourceOutcome CustomerProfilesClient::ListTagsForResource(const Lis
 
 ListWorkflowsOutcome CustomerProfilesClient::ListWorkflows(const ListWorkflowsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListWorkflows);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListWorkflows, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -664,6 +841,7 @@ ListWorkflowsOutcome CustomerProfilesClient::ListWorkflows(const ListWorkflowsRe
 
 MergeProfilesOutcome CustomerProfilesClient::MergeProfiles(const MergeProfilesRequest& request) const
 {
+  AWS_OPERATION_GUARD(MergeProfiles);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, MergeProfiles, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -680,6 +858,7 @@ MergeProfilesOutcome CustomerProfilesClient::MergeProfiles(const MergeProfilesRe
 
 PutIntegrationOutcome CustomerProfilesClient::PutIntegration(const PutIntegrationRequest& request) const
 {
+  AWS_OPERATION_GUARD(PutIntegration);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, PutIntegration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -696,6 +875,7 @@ PutIntegrationOutcome CustomerProfilesClient::PutIntegration(const PutIntegratio
 
 PutProfileObjectOutcome CustomerProfilesClient::PutProfileObject(const PutProfileObjectRequest& request) const
 {
+  AWS_OPERATION_GUARD(PutProfileObject);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, PutProfileObject, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -712,6 +892,7 @@ PutProfileObjectOutcome CustomerProfilesClient::PutProfileObject(const PutProfil
 
 PutProfileObjectTypeOutcome CustomerProfilesClient::PutProfileObjectType(const PutProfileObjectTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(PutProfileObjectType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, PutProfileObjectType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -734,6 +915,7 @@ PutProfileObjectTypeOutcome CustomerProfilesClient::PutProfileObjectType(const P
 
 SearchProfilesOutcome CustomerProfilesClient::SearchProfiles(const SearchProfilesRequest& request) const
 {
+  AWS_OPERATION_GUARD(SearchProfiles);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, SearchProfiles, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -750,6 +932,7 @@ SearchProfilesOutcome CustomerProfilesClient::SearchProfiles(const SearchProfile
 
 TagResourceOutcome CustomerProfilesClient::TagResource(const TagResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(TagResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, TagResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -765,6 +948,7 @@ TagResourceOutcome CustomerProfilesClient::TagResource(const TagResourceRequest&
 
 UntagResourceOutcome CustomerProfilesClient::UntagResource(const UntagResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(UntagResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UntagResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -783,8 +967,32 @@ UntagResourceOutcome CustomerProfilesClient::UntagResource(const UntagResourceRe
   return UntagResourceOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_DELETE, Aws::Auth::SIGV4_SIGNER));
 }
 
+UpdateCalculatedAttributeDefinitionOutcome CustomerProfilesClient::UpdateCalculatedAttributeDefinition(const UpdateCalculatedAttributeDefinitionRequest& request) const
+{
+  AWS_OPERATION_GUARD(UpdateCalculatedAttributeDefinition);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.DomainNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("UpdateCalculatedAttributeDefinition", "Required field: DomainName, is not set");
+    return UpdateCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [DomainName]", false));
+  }
+  if (!request.CalculatedAttributeNameHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("UpdateCalculatedAttributeDefinition", "Required field: CalculatedAttributeName, is not set");
+    return UpdateCalculatedAttributeDefinitionOutcome(Aws::Client::AWSError<CustomerProfilesErrors>(CustomerProfilesErrors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [CalculatedAttributeName]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, UpdateCalculatedAttributeDefinition, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/domains/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetDomainName());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/calculated-attributes/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetCalculatedAttributeName());
+  return UpdateCalculatedAttributeDefinitionOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_PUT, Aws::Auth::SIGV4_SIGNER));
+}
+
 UpdateDomainOutcome CustomerProfilesClient::UpdateDomain(const UpdateDomainRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateDomain);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateDomain, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {
@@ -800,6 +1008,7 @@ UpdateDomainOutcome CustomerProfilesClient::UpdateDomain(const UpdateDomainReque
 
 UpdateProfileOutcome CustomerProfilesClient::UpdateProfile(const UpdateProfileRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateProfile);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateProfile, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.DomainNameHasBeenSet())
   {

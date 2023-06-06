@@ -49,7 +49,20 @@ static void S3CrtRequestFinishCallback(struct aws_s3_meta_request *meta_request,
 {
   AWS_UNREFERENCED_PARAM(meta_request);
   auto *userData = static_cast<S3CrtClient::CrtRequestCallbackUserData*>(user_data);
-  userData->response->SetResponseCode(static_cast<HttpResponseCode>(meta_request_result->response_status));
+  
+  if (meta_request_result->error_code != AWS_ERROR_SUCCESS && meta_request_result->response_status == 0) {
+    /* client side error */
+    userData->response->SetClientErrorType(CoreErrors::NETWORK_CONNECTION);
+    Aws::StringStream ss;
+    ss << "crtCode: " << meta_request_result->error_code 
+      << ", " << aws_error_name(meta_request_result->error_code) 
+      << " - " << aws_error_str(meta_request_result->error_code);
+    userData->response->SetClientErrorMessage(ss.str());
+    userData->response->SetResponseCode(HttpResponseCode::REQUEST_NOT_MADE);
+  } else {
+    userData->response->SetResponseCode(static_cast<HttpResponseCode>(meta_request_result->response_status));
+  }
+
   if (meta_request_result->error_response_headers)
   {
     size_t headersCount = aws_http_headers_count(meta_request_result->error_response_headers);
@@ -308,6 +321,7 @@ void ${className}::${operation.name}Async(${constText}${operation.request.shape.
 
 ${operation.name}Outcome ${className}::${operation.name}(${constText}${operation.request.shape.name}& request) const
 {
+  AWS_OPERATION_GUARD(${operation.name});
   Aws::Utils::Threading::Semaphore sem(0, 1);
   ${operation.name}Outcome res;
 
@@ -378,6 +392,7 @@ void ${className}::${operation.name}Async(${constText}${operation.name}ResponseR
 
 ${operation.name}Outcome ${className}::${operation.name}() const
 {
+  AWS_OPERATION_GUARD(${operation.name});
   Aws::Utils::Threading::Semaphore sem(0, 1);
   ${operation.name}Outcome res;
 #if($operation.result && $operation.result.shape.hasStreamMembers())

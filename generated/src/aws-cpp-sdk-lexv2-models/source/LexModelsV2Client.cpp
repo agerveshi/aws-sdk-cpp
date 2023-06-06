@@ -35,6 +35,7 @@
 #include <aws/lexv2-models/model/CreateResourcePolicyStatementRequest.h>
 #include <aws/lexv2-models/model/CreateSlotRequest.h>
 #include <aws/lexv2-models/model/CreateSlotTypeRequest.h>
+#include <aws/lexv2-models/model/CreateTestSetDiscrepancyReportRequest.h>
 #include <aws/lexv2-models/model/CreateUploadUrlRequest.h>
 #include <aws/lexv2-models/model/DeleteBotRequest.h>
 #include <aws/lexv2-models/model/DeleteBotAliasRequest.h>
@@ -48,6 +49,7 @@
 #include <aws/lexv2-models/model/DeleteResourcePolicyStatementRequest.h>
 #include <aws/lexv2-models/model/DeleteSlotRequest.h>
 #include <aws/lexv2-models/model/DeleteSlotTypeRequest.h>
+#include <aws/lexv2-models/model/DeleteTestSetRequest.h>
 #include <aws/lexv2-models/model/DeleteUtterancesRequest.h>
 #include <aws/lexv2-models/model/DescribeBotRequest.h>
 #include <aws/lexv2-models/model/DescribeBotAliasRequest.h>
@@ -61,6 +63,11 @@
 #include <aws/lexv2-models/model/DescribeResourcePolicyRequest.h>
 #include <aws/lexv2-models/model/DescribeSlotRequest.h>
 #include <aws/lexv2-models/model/DescribeSlotTypeRequest.h>
+#include <aws/lexv2-models/model/DescribeTestExecutionRequest.h>
+#include <aws/lexv2-models/model/DescribeTestSetRequest.h>
+#include <aws/lexv2-models/model/DescribeTestSetDiscrepancyReportRequest.h>
+#include <aws/lexv2-models/model/DescribeTestSetGenerationRequest.h>
+#include <aws/lexv2-models/model/GetTestExecutionArtifactsUrlRequest.h>
 #include <aws/lexv2-models/model/ListAggregatedUtterancesRequest.h>
 #include <aws/lexv2-models/model/ListBotAliasesRequest.h>
 #include <aws/lexv2-models/model/ListBotLocalesRequest.h>
@@ -77,9 +84,15 @@
 #include <aws/lexv2-models/model/ListSlotTypesRequest.h>
 #include <aws/lexv2-models/model/ListSlotsRequest.h>
 #include <aws/lexv2-models/model/ListTagsForResourceRequest.h>
+#include <aws/lexv2-models/model/ListTestExecutionResultItemsRequest.h>
+#include <aws/lexv2-models/model/ListTestExecutionsRequest.h>
+#include <aws/lexv2-models/model/ListTestSetRecordsRequest.h>
+#include <aws/lexv2-models/model/ListTestSetsRequest.h>
 #include <aws/lexv2-models/model/SearchAssociatedTranscriptsRequest.h>
 #include <aws/lexv2-models/model/StartBotRecommendationRequest.h>
 #include <aws/lexv2-models/model/StartImportRequest.h>
+#include <aws/lexv2-models/model/StartTestExecutionRequest.h>
+#include <aws/lexv2-models/model/StartTestSetGenerationRequest.h>
 #include <aws/lexv2-models/model/StopBotRecommendationRequest.h>
 #include <aws/lexv2-models/model/TagResourceRequest.h>
 #include <aws/lexv2-models/model/UntagResourceRequest.h>
@@ -92,6 +105,7 @@
 #include <aws/lexv2-models/model/UpdateResourcePolicyRequest.h>
 #include <aws/lexv2-models/model/UpdateSlotRequest.h>
 #include <aws/lexv2-models/model/UpdateSlotTypeRequest.h>
+#include <aws/lexv2-models/model/UpdateTestSetRequest.h>
 
 using namespace Aws;
 using namespace Aws::Auth;
@@ -200,6 +214,7 @@ LexModelsV2Client::LexModelsV2Client(const std::shared_ptr<AWSCredentialsProvide
     /* End of legacy constructors due deprecation */
 LexModelsV2Client::~LexModelsV2Client()
 {
+  ShutdownSdkClient(this, -1);
 }
 
 std::shared_ptr<LexModelsV2EndpointProviderBase>& LexModelsV2Client::accessEndpointProvider()
@@ -222,6 +237,7 @@ void LexModelsV2Client::OverrideEndpoint(const Aws::String& endpoint)
 
 BatchCreateCustomVocabularyItemOutcome LexModelsV2Client::BatchCreateCustomVocabularyItem(const BatchCreateCustomVocabularyItemRequest& request) const
 {
+  AWS_OPERATION_GUARD(BatchCreateCustomVocabularyItem);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, BatchCreateCustomVocabularyItem, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -252,6 +268,7 @@ BatchCreateCustomVocabularyItemOutcome LexModelsV2Client::BatchCreateCustomVocab
 
 BatchDeleteCustomVocabularyItemOutcome LexModelsV2Client::BatchDeleteCustomVocabularyItem(const BatchDeleteCustomVocabularyItemRequest& request) const
 {
+  AWS_OPERATION_GUARD(BatchDeleteCustomVocabularyItem);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, BatchDeleteCustomVocabularyItem, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -282,6 +299,7 @@ BatchDeleteCustomVocabularyItemOutcome LexModelsV2Client::BatchDeleteCustomVocab
 
 BatchUpdateCustomVocabularyItemOutcome LexModelsV2Client::BatchUpdateCustomVocabularyItem(const BatchUpdateCustomVocabularyItemRequest& request) const
 {
+  AWS_OPERATION_GUARD(BatchUpdateCustomVocabularyItem);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, BatchUpdateCustomVocabularyItem, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -312,6 +330,7 @@ BatchUpdateCustomVocabularyItemOutcome LexModelsV2Client::BatchUpdateCustomVocab
 
 BuildBotLocaleOutcome LexModelsV2Client::BuildBotLocale(const BuildBotLocaleRequest& request) const
 {
+  AWS_OPERATION_GUARD(BuildBotLocale);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, BuildBotLocale, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -341,6 +360,7 @@ BuildBotLocaleOutcome LexModelsV2Client::BuildBotLocale(const BuildBotLocaleRequ
 
 CreateBotOutcome LexModelsV2Client::CreateBot(const CreateBotRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateBot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateBot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateBot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -350,6 +370,7 @@ CreateBotOutcome LexModelsV2Client::CreateBot(const CreateBotRequest& request) c
 
 CreateBotAliasOutcome LexModelsV2Client::CreateBotAlias(const CreateBotAliasRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateBotAlias);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateBotAlias, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -366,6 +387,7 @@ CreateBotAliasOutcome LexModelsV2Client::CreateBotAlias(const CreateBotAliasRequ
 
 CreateBotLocaleOutcome LexModelsV2Client::CreateBotLocale(const CreateBotLocaleRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateBotLocale);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateBotLocale, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -389,6 +411,7 @@ CreateBotLocaleOutcome LexModelsV2Client::CreateBotLocale(const CreateBotLocaleR
 
 CreateBotVersionOutcome LexModelsV2Client::CreateBotVersion(const CreateBotVersionRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateBotVersion);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateBotVersion, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -405,6 +428,7 @@ CreateBotVersionOutcome LexModelsV2Client::CreateBotVersion(const CreateBotVersi
 
 CreateExportOutcome LexModelsV2Client::CreateExport(const CreateExportRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateExport);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateExport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateExport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -414,6 +438,7 @@ CreateExportOutcome LexModelsV2Client::CreateExport(const CreateExportRequest& r
 
 CreateIntentOutcome LexModelsV2Client::CreateIntent(const CreateIntentRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateIntent);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateIntent, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -444,6 +469,7 @@ CreateIntentOutcome LexModelsV2Client::CreateIntent(const CreateIntentRequest& r
 
 CreateResourcePolicyOutcome LexModelsV2Client::CreateResourcePolicy(const CreateResourcePolicyRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateResourcePolicy);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateResourcePolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -459,6 +485,7 @@ CreateResourcePolicyOutcome LexModelsV2Client::CreateResourcePolicy(const Create
 
 CreateResourcePolicyStatementOutcome LexModelsV2Client::CreateResourcePolicyStatement(const CreateResourcePolicyStatementRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateResourcePolicyStatement);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateResourcePolicyStatement, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -475,6 +502,7 @@ CreateResourcePolicyStatementOutcome LexModelsV2Client::CreateResourcePolicyStat
 
 CreateSlotOutcome LexModelsV2Client::CreateSlot(const CreateSlotRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateSlot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateSlot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -512,6 +540,7 @@ CreateSlotOutcome LexModelsV2Client::CreateSlot(const CreateSlotRequest& request
 
 CreateSlotTypeOutcome LexModelsV2Client::CreateSlotType(const CreateSlotTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateSlotType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateSlotType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -540,8 +569,26 @@ CreateSlotTypeOutcome LexModelsV2Client::CreateSlotType(const CreateSlotTypeRequ
   return CreateSlotTypeOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_PUT, Aws::Auth::SIGV4_SIGNER));
 }
 
+CreateTestSetDiscrepancyReportOutcome LexModelsV2Client::CreateTestSetDiscrepancyReport(const CreateTestSetDiscrepancyReportRequest& request) const
+{
+  AWS_OPERATION_GUARD(CreateTestSetDiscrepancyReport);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateTestSetDiscrepancyReport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("CreateTestSetDiscrepancyReport", "Required field: TestSetId, is not set");
+    return CreateTestSetDiscrepancyReportOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateTestSetDiscrepancyReport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsets/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetId());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsetdiscrepancy");
+  return CreateTestSetDiscrepancyReportOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
 CreateUploadUrlOutcome LexModelsV2Client::CreateUploadUrl(const CreateUploadUrlRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateUploadUrl);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateUploadUrl, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateUploadUrl, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -551,6 +598,7 @@ CreateUploadUrlOutcome LexModelsV2Client::CreateUploadUrl(const CreateUploadUrlR
 
 DeleteBotOutcome LexModelsV2Client::DeleteBot(const DeleteBotRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteBot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteBot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -566,6 +614,7 @@ DeleteBotOutcome LexModelsV2Client::DeleteBot(const DeleteBotRequest& request) c
 
 DeleteBotAliasOutcome LexModelsV2Client::DeleteBotAlias(const DeleteBotAliasRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteBotAlias);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteBotAlias, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotAliasIdHasBeenSet())
   {
@@ -588,6 +637,7 @@ DeleteBotAliasOutcome LexModelsV2Client::DeleteBotAlias(const DeleteBotAliasRequ
 
 DeleteBotLocaleOutcome LexModelsV2Client::DeleteBotLocale(const DeleteBotLocaleRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteBotLocale);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteBotLocale, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -617,6 +667,7 @@ DeleteBotLocaleOutcome LexModelsV2Client::DeleteBotLocale(const DeleteBotLocaleR
 
 DeleteBotVersionOutcome LexModelsV2Client::DeleteBotVersion(const DeleteBotVersionRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteBotVersion);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteBotVersion, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -639,6 +690,7 @@ DeleteBotVersionOutcome LexModelsV2Client::DeleteBotVersion(const DeleteBotVersi
 
 DeleteCustomVocabularyOutcome LexModelsV2Client::DeleteCustomVocabulary(const DeleteCustomVocabularyRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteCustomVocabulary);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteCustomVocabulary, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -669,6 +721,7 @@ DeleteCustomVocabularyOutcome LexModelsV2Client::DeleteCustomVocabulary(const De
 
 DeleteExportOutcome LexModelsV2Client::DeleteExport(const DeleteExportRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteExport);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteExport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ExportIdHasBeenSet())
   {
@@ -684,6 +737,7 @@ DeleteExportOutcome LexModelsV2Client::DeleteExport(const DeleteExportRequest& r
 
 DeleteImportOutcome LexModelsV2Client::DeleteImport(const DeleteImportRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteImport);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteImport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ImportIdHasBeenSet())
   {
@@ -699,6 +753,7 @@ DeleteImportOutcome LexModelsV2Client::DeleteImport(const DeleteImportRequest& r
 
 DeleteIntentOutcome LexModelsV2Client::DeleteIntent(const DeleteIntentRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteIntent);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteIntent, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.IntentIdHasBeenSet())
   {
@@ -735,6 +790,7 @@ DeleteIntentOutcome LexModelsV2Client::DeleteIntent(const DeleteIntentRequest& r
 
 DeleteResourcePolicyOutcome LexModelsV2Client::DeleteResourcePolicy(const DeleteResourcePolicyRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteResourcePolicy);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteResourcePolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -750,6 +806,7 @@ DeleteResourcePolicyOutcome LexModelsV2Client::DeleteResourcePolicy(const Delete
 
 DeleteResourcePolicyStatementOutcome LexModelsV2Client::DeleteResourcePolicyStatement(const DeleteResourcePolicyStatementRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteResourcePolicyStatement);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteResourcePolicyStatement, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -772,6 +829,7 @@ DeleteResourcePolicyStatementOutcome LexModelsV2Client::DeleteResourcePolicyStat
 
 DeleteSlotOutcome LexModelsV2Client::DeleteSlot(const DeleteSlotRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteSlot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteSlot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.SlotIdHasBeenSet())
   {
@@ -815,6 +873,7 @@ DeleteSlotOutcome LexModelsV2Client::DeleteSlot(const DeleteSlotRequest& request
 
 DeleteSlotTypeOutcome LexModelsV2Client::DeleteSlotType(const DeleteSlotTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteSlotType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteSlotType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.SlotTypeIdHasBeenSet())
   {
@@ -849,8 +908,25 @@ DeleteSlotTypeOutcome LexModelsV2Client::DeleteSlotType(const DeleteSlotTypeRequ
   return DeleteSlotTypeOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_DELETE, Aws::Auth::SIGV4_SIGNER));
 }
 
+DeleteTestSetOutcome LexModelsV2Client::DeleteTestSet(const DeleteTestSetRequest& request) const
+{
+  AWS_OPERATION_GUARD(DeleteTestSet);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteTestSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("DeleteTestSet", "Required field: TestSetId, is not set");
+    return DeleteTestSetOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeleteTestSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsets/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetId());
+  return DeleteTestSetOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_DELETE, Aws::Auth::SIGV4_SIGNER));
+}
+
 DeleteUtterancesOutcome LexModelsV2Client::DeleteUtterances(const DeleteUtterancesRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteUtterances);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteUtterances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -867,6 +943,7 @@ DeleteUtterancesOutcome LexModelsV2Client::DeleteUtterances(const DeleteUtteranc
 
 DescribeBotOutcome LexModelsV2Client::DescribeBot(const DescribeBotRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeBot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeBot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -882,6 +959,7 @@ DescribeBotOutcome LexModelsV2Client::DescribeBot(const DescribeBotRequest& requ
 
 DescribeBotAliasOutcome LexModelsV2Client::DescribeBotAlias(const DescribeBotAliasRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeBotAlias);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeBotAlias, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotAliasIdHasBeenSet())
   {
@@ -904,6 +982,7 @@ DescribeBotAliasOutcome LexModelsV2Client::DescribeBotAlias(const DescribeBotAli
 
 DescribeBotLocaleOutcome LexModelsV2Client::DescribeBotLocale(const DescribeBotLocaleRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeBotLocale);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeBotLocale, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -933,6 +1012,7 @@ DescribeBotLocaleOutcome LexModelsV2Client::DescribeBotLocale(const DescribeBotL
 
 DescribeBotRecommendationOutcome LexModelsV2Client::DescribeBotRecommendation(const DescribeBotRecommendationRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeBotRecommendation);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeBotRecommendation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -969,6 +1049,7 @@ DescribeBotRecommendationOutcome LexModelsV2Client::DescribeBotRecommendation(co
 
 DescribeBotVersionOutcome LexModelsV2Client::DescribeBotVersion(const DescribeBotVersionRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeBotVersion);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeBotVersion, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -991,6 +1072,7 @@ DescribeBotVersionOutcome LexModelsV2Client::DescribeBotVersion(const DescribeBo
 
 DescribeCustomVocabularyMetadataOutcome LexModelsV2Client::DescribeCustomVocabularyMetadata(const DescribeCustomVocabularyMetadataRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeCustomVocabularyMetadata);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeCustomVocabularyMetadata, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1021,6 +1103,7 @@ DescribeCustomVocabularyMetadataOutcome LexModelsV2Client::DescribeCustomVocabul
 
 DescribeExportOutcome LexModelsV2Client::DescribeExport(const DescribeExportRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeExport);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeExport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ExportIdHasBeenSet())
   {
@@ -1036,6 +1119,7 @@ DescribeExportOutcome LexModelsV2Client::DescribeExport(const DescribeExportRequ
 
 DescribeImportOutcome LexModelsV2Client::DescribeImport(const DescribeImportRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeImport);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeImport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ImportIdHasBeenSet())
   {
@@ -1051,6 +1135,7 @@ DescribeImportOutcome LexModelsV2Client::DescribeImport(const DescribeImportRequ
 
 DescribeIntentOutcome LexModelsV2Client::DescribeIntent(const DescribeIntentRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeIntent);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeIntent, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.IntentIdHasBeenSet())
   {
@@ -1087,6 +1172,7 @@ DescribeIntentOutcome LexModelsV2Client::DescribeIntent(const DescribeIntentRequ
 
 DescribeResourcePolicyOutcome LexModelsV2Client::DescribeResourcePolicy(const DescribeResourcePolicyRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeResourcePolicy);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeResourcePolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -1102,6 +1188,7 @@ DescribeResourcePolicyOutcome LexModelsV2Client::DescribeResourcePolicy(const De
 
 DescribeSlotOutcome LexModelsV2Client::DescribeSlot(const DescribeSlotRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeSlot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeSlot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.SlotIdHasBeenSet())
   {
@@ -1145,6 +1232,7 @@ DescribeSlotOutcome LexModelsV2Client::DescribeSlot(const DescribeSlotRequest& r
 
 DescribeSlotTypeOutcome LexModelsV2Client::DescribeSlotType(const DescribeSlotTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeSlotType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeSlotType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.SlotTypeIdHasBeenSet())
   {
@@ -1179,8 +1267,90 @@ DescribeSlotTypeOutcome LexModelsV2Client::DescribeSlotType(const DescribeSlotTy
   return DescribeSlotTypeOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
 }
 
+DescribeTestExecutionOutcome LexModelsV2Client::DescribeTestExecution(const DescribeTestExecutionRequest& request) const
+{
+  AWS_OPERATION_GUARD(DescribeTestExecution);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeTestExecution, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestExecutionIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("DescribeTestExecution", "Required field: TestExecutionId, is not set");
+    return DescribeTestExecutionOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestExecutionId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeTestExecution, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testexecutions/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestExecutionId());
+  return DescribeTestExecutionOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
+DescribeTestSetOutcome LexModelsV2Client::DescribeTestSet(const DescribeTestSetRequest& request) const
+{
+  AWS_OPERATION_GUARD(DescribeTestSet);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeTestSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("DescribeTestSet", "Required field: TestSetId, is not set");
+    return DescribeTestSetOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeTestSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsets/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetId());
+  return DescribeTestSetOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
+DescribeTestSetDiscrepancyReportOutcome LexModelsV2Client::DescribeTestSetDiscrepancyReport(const DescribeTestSetDiscrepancyReportRequest& request) const
+{
+  AWS_OPERATION_GUARD(DescribeTestSetDiscrepancyReport);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeTestSetDiscrepancyReport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetDiscrepancyReportIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("DescribeTestSetDiscrepancyReport", "Required field: TestSetDiscrepancyReportId, is not set");
+    return DescribeTestSetDiscrepancyReportOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetDiscrepancyReportId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeTestSetDiscrepancyReport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsetdiscrepancy/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetDiscrepancyReportId());
+  return DescribeTestSetDiscrepancyReportOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
+DescribeTestSetGenerationOutcome LexModelsV2Client::DescribeTestSetGeneration(const DescribeTestSetGenerationRequest& request) const
+{
+  AWS_OPERATION_GUARD(DescribeTestSetGeneration);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeTestSetGeneration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetGenerationIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("DescribeTestSetGeneration", "Required field: TestSetGenerationId, is not set");
+    return DescribeTestSetGenerationOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetGenerationId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeTestSetGeneration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsetgenerations/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetGenerationId());
+  return DescribeTestSetGenerationOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
+GetTestExecutionArtifactsUrlOutcome LexModelsV2Client::GetTestExecutionArtifactsUrl(const GetTestExecutionArtifactsUrlRequest& request) const
+{
+  AWS_OPERATION_GUARD(GetTestExecutionArtifactsUrl);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetTestExecutionArtifactsUrl, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestExecutionIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("GetTestExecutionArtifactsUrl", "Required field: TestExecutionId, is not set");
+    return GetTestExecutionArtifactsUrlOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestExecutionId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, GetTestExecutionArtifactsUrl, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testexecutions/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestExecutionId());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/artifacturl");
+  return GetTestExecutionArtifactsUrlOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
+}
+
 ListAggregatedUtterancesOutcome LexModelsV2Client::ListAggregatedUtterances(const ListAggregatedUtterancesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListAggregatedUtterances);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListAggregatedUtterances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1197,6 +1367,7 @@ ListAggregatedUtterancesOutcome LexModelsV2Client::ListAggregatedUtterances(cons
 
 ListBotAliasesOutcome LexModelsV2Client::ListBotAliases(const ListBotAliasesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListBotAliases);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListBotAliases, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1213,6 +1384,7 @@ ListBotAliasesOutcome LexModelsV2Client::ListBotAliases(const ListBotAliasesRequ
 
 ListBotLocalesOutcome LexModelsV2Client::ListBotLocales(const ListBotLocalesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListBotLocales);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListBotLocales, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1236,6 +1408,7 @@ ListBotLocalesOutcome LexModelsV2Client::ListBotLocales(const ListBotLocalesRequ
 
 ListBotRecommendationsOutcome LexModelsV2Client::ListBotRecommendations(const ListBotRecommendationsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListBotRecommendations);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListBotRecommendations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1266,6 +1439,7 @@ ListBotRecommendationsOutcome LexModelsV2Client::ListBotRecommendations(const Li
 
 ListBotVersionsOutcome LexModelsV2Client::ListBotVersions(const ListBotVersionsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListBotVersions);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListBotVersions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1282,6 +1456,7 @@ ListBotVersionsOutcome LexModelsV2Client::ListBotVersions(const ListBotVersionsR
 
 ListBotsOutcome LexModelsV2Client::ListBots(const ListBotsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListBots);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListBots, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListBots, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -1291,6 +1466,7 @@ ListBotsOutcome LexModelsV2Client::ListBots(const ListBotsRequest& request) cons
 
 ListBuiltInIntentsOutcome LexModelsV2Client::ListBuiltInIntents(const ListBuiltInIntentsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListBuiltInIntents);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListBuiltInIntents, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.LocaleIdHasBeenSet())
   {
@@ -1307,6 +1483,7 @@ ListBuiltInIntentsOutcome LexModelsV2Client::ListBuiltInIntents(const ListBuiltI
 
 ListBuiltInSlotTypesOutcome LexModelsV2Client::ListBuiltInSlotTypes(const ListBuiltInSlotTypesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListBuiltInSlotTypes);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListBuiltInSlotTypes, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.LocaleIdHasBeenSet())
   {
@@ -1323,6 +1500,7 @@ ListBuiltInSlotTypesOutcome LexModelsV2Client::ListBuiltInSlotTypes(const ListBu
 
 ListCustomVocabularyItemsOutcome LexModelsV2Client::ListCustomVocabularyItems(const ListCustomVocabularyItemsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListCustomVocabularyItems);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListCustomVocabularyItems, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1353,6 +1531,7 @@ ListCustomVocabularyItemsOutcome LexModelsV2Client::ListCustomVocabularyItems(co
 
 ListExportsOutcome LexModelsV2Client::ListExports(const ListExportsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListExports);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListExports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListExports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -1362,6 +1541,7 @@ ListExportsOutcome LexModelsV2Client::ListExports(const ListExportsRequest& requ
 
 ListImportsOutcome LexModelsV2Client::ListImports(const ListImportsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListImports);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListImports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListImports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -1371,6 +1551,7 @@ ListImportsOutcome LexModelsV2Client::ListImports(const ListImportsRequest& requ
 
 ListIntentsOutcome LexModelsV2Client::ListIntents(const ListIntentsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListIntents);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListIntents, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1401,6 +1582,7 @@ ListIntentsOutcome LexModelsV2Client::ListIntents(const ListIntentsRequest& requ
 
 ListRecommendedIntentsOutcome LexModelsV2Client::ListRecommendedIntents(const ListRecommendedIntentsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListRecommendedIntents);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListRecommendedIntents, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1438,6 +1620,7 @@ ListRecommendedIntentsOutcome LexModelsV2Client::ListRecommendedIntents(const Li
 
 ListSlotTypesOutcome LexModelsV2Client::ListSlotTypes(const ListSlotTypesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListSlotTypes);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListSlotTypes, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1468,6 +1651,7 @@ ListSlotTypesOutcome LexModelsV2Client::ListSlotTypes(const ListSlotTypesRequest
 
 ListSlotsOutcome LexModelsV2Client::ListSlots(const ListSlotsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListSlots);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListSlots, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1505,6 +1689,7 @@ ListSlotsOutcome LexModelsV2Client::ListSlots(const ListSlotsRequest& request) c
 
 ListTagsForResourceOutcome LexModelsV2Client::ListTagsForResource(const ListTagsForResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListTagsForResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTagsForResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceARNHasBeenSet())
   {
@@ -1518,8 +1703,63 @@ ListTagsForResourceOutcome LexModelsV2Client::ListTagsForResource(const ListTags
   return ListTagsForResourceOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_GET, Aws::Auth::SIGV4_SIGNER));
 }
 
+ListTestExecutionResultItemsOutcome LexModelsV2Client::ListTestExecutionResultItems(const ListTestExecutionResultItemsRequest& request) const
+{
+  AWS_OPERATION_GUARD(ListTestExecutionResultItems);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTestExecutionResultItems, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestExecutionIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("ListTestExecutionResultItems", "Required field: TestExecutionId, is not set");
+    return ListTestExecutionResultItemsOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestExecutionId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListTestExecutionResultItems, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testexecutions/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestExecutionId());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/results");
+  return ListTestExecutionResultItemsOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
+ListTestExecutionsOutcome LexModelsV2Client::ListTestExecutions(const ListTestExecutionsRequest& request) const
+{
+  AWS_OPERATION_GUARD(ListTestExecutions);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTestExecutions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListTestExecutions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testexecutions");
+  return ListTestExecutionsOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
+ListTestSetRecordsOutcome LexModelsV2Client::ListTestSetRecords(const ListTestSetRecordsRequest& request) const
+{
+  AWS_OPERATION_GUARD(ListTestSetRecords);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTestSetRecords, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("ListTestSetRecords", "Required field: TestSetId, is not set");
+    return ListTestSetRecordsOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListTestSetRecords, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsets/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetId());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/records");
+  return ListTestSetRecordsOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
+ListTestSetsOutcome LexModelsV2Client::ListTestSets(const ListTestSetsRequest& request) const
+{
+  AWS_OPERATION_GUARD(ListTestSets);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTestSets, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListTestSets, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsets");
+  return ListTestSetsOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
 SearchAssociatedTranscriptsOutcome LexModelsV2Client::SearchAssociatedTranscripts(const SearchAssociatedTranscriptsRequest& request) const
 {
+  AWS_OPERATION_GUARD(SearchAssociatedTranscripts);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, SearchAssociatedTranscripts, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1557,6 +1797,7 @@ SearchAssociatedTranscriptsOutcome LexModelsV2Client::SearchAssociatedTranscript
 
 StartBotRecommendationOutcome LexModelsV2Client::StartBotRecommendation(const StartBotRecommendationRequest& request) const
 {
+  AWS_OPERATION_GUARD(StartBotRecommendation);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, StartBotRecommendation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1587,6 +1828,7 @@ StartBotRecommendationOutcome LexModelsV2Client::StartBotRecommendation(const St
 
 StartImportOutcome LexModelsV2Client::StartImport(const StartImportRequest& request) const
 {
+  AWS_OPERATION_GUARD(StartImport);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, StartImport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, StartImport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -1594,8 +1836,36 @@ StartImportOutcome LexModelsV2Client::StartImport(const StartImportRequest& requ
   return StartImportOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_PUT, Aws::Auth::SIGV4_SIGNER));
 }
 
+StartTestExecutionOutcome LexModelsV2Client::StartTestExecution(const StartTestExecutionRequest& request) const
+{
+  AWS_OPERATION_GUARD(StartTestExecution);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, StartTestExecution, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("StartTestExecution", "Required field: TestSetId, is not set");
+    return StartTestExecutionOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, StartTestExecution, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsets/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetId());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testexecutions");
+  return StartTestExecutionOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST, Aws::Auth::SIGV4_SIGNER));
+}
+
+StartTestSetGenerationOutcome LexModelsV2Client::StartTestSetGeneration(const StartTestSetGenerationRequest& request) const
+{
+  AWS_OPERATION_GUARD(StartTestSetGeneration);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, StartTestSetGeneration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, StartTestSetGeneration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsetgenerations");
+  return StartTestSetGenerationOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_PUT, Aws::Auth::SIGV4_SIGNER));
+}
+
 StopBotRecommendationOutcome LexModelsV2Client::StopBotRecommendation(const StopBotRecommendationRequest& request) const
 {
+  AWS_OPERATION_GUARD(StopBotRecommendation);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, StopBotRecommendation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1633,6 +1903,7 @@ StopBotRecommendationOutcome LexModelsV2Client::StopBotRecommendation(const Stop
 
 TagResourceOutcome LexModelsV2Client::TagResource(const TagResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(TagResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, TagResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceARNHasBeenSet())
   {
@@ -1648,6 +1919,7 @@ TagResourceOutcome LexModelsV2Client::TagResource(const TagResourceRequest& requ
 
 UntagResourceOutcome LexModelsV2Client::UntagResource(const UntagResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(UntagResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UntagResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceARNHasBeenSet())
   {
@@ -1668,6 +1940,7 @@ UntagResourceOutcome LexModelsV2Client::UntagResource(const UntagResourceRequest
 
 UpdateBotOutcome LexModelsV2Client::UpdateBot(const UpdateBotRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateBot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateBot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1683,6 +1956,7 @@ UpdateBotOutcome LexModelsV2Client::UpdateBot(const UpdateBotRequest& request) c
 
 UpdateBotAliasOutcome LexModelsV2Client::UpdateBotAlias(const UpdateBotAliasRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateBotAlias);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateBotAlias, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotAliasIdHasBeenSet())
   {
@@ -1705,6 +1979,7 @@ UpdateBotAliasOutcome LexModelsV2Client::UpdateBotAlias(const UpdateBotAliasRequ
 
 UpdateBotLocaleOutcome LexModelsV2Client::UpdateBotLocale(const UpdateBotLocaleRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateBotLocale);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateBotLocale, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1734,6 +2009,7 @@ UpdateBotLocaleOutcome LexModelsV2Client::UpdateBotLocale(const UpdateBotLocaleR
 
 UpdateBotRecommendationOutcome LexModelsV2Client::UpdateBotRecommendation(const UpdateBotRecommendationRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateBotRecommendation);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateBotRecommendation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.BotIdHasBeenSet())
   {
@@ -1770,6 +2046,7 @@ UpdateBotRecommendationOutcome LexModelsV2Client::UpdateBotRecommendation(const 
 
 UpdateExportOutcome LexModelsV2Client::UpdateExport(const UpdateExportRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateExport);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateExport, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ExportIdHasBeenSet())
   {
@@ -1785,6 +2062,7 @@ UpdateExportOutcome LexModelsV2Client::UpdateExport(const UpdateExportRequest& r
 
 UpdateIntentOutcome LexModelsV2Client::UpdateIntent(const UpdateIntentRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateIntent);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateIntent, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.IntentIdHasBeenSet())
   {
@@ -1821,6 +2099,7 @@ UpdateIntentOutcome LexModelsV2Client::UpdateIntent(const UpdateIntentRequest& r
 
 UpdateResourcePolicyOutcome LexModelsV2Client::UpdateResourcePolicy(const UpdateResourcePolicyRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateResourcePolicy);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateResourcePolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.ResourceArnHasBeenSet())
   {
@@ -1836,6 +2115,7 @@ UpdateResourcePolicyOutcome LexModelsV2Client::UpdateResourcePolicy(const Update
 
 UpdateSlotOutcome LexModelsV2Client::UpdateSlot(const UpdateSlotRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateSlot);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateSlot, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.SlotIdHasBeenSet())
   {
@@ -1879,6 +2159,7 @@ UpdateSlotOutcome LexModelsV2Client::UpdateSlot(const UpdateSlotRequest& request
 
 UpdateSlotTypeOutcome LexModelsV2Client::UpdateSlotType(const UpdateSlotTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateSlotType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateSlotType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   if (!request.SlotTypeIdHasBeenSet())
   {
@@ -1911,5 +2192,21 @@ UpdateSlotTypeOutcome LexModelsV2Client::UpdateSlotType(const UpdateSlotTypeRequ
   endpointResolutionOutcome.GetResult().AddPathSegments("/slottypes/");
   endpointResolutionOutcome.GetResult().AddPathSegment(request.GetSlotTypeId());
   return UpdateSlotTypeOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_PUT, Aws::Auth::SIGV4_SIGNER));
+}
+
+UpdateTestSetOutcome LexModelsV2Client::UpdateTestSet(const UpdateTestSetRequest& request) const
+{
+  AWS_OPERATION_GUARD(UpdateTestSet);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateTestSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  if (!request.TestSetIdHasBeenSet())
+  {
+    AWS_LOGSTREAM_ERROR("UpdateTestSet", "Required field: TestSetId, is not set");
+    return UpdateTestSetOutcome(Aws::Client::AWSError<LexModelsV2Errors>(LexModelsV2Errors::MISSING_PARAMETER, "MISSING_PARAMETER", "Missing required field [TestSetId]", false));
+  }
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, UpdateTestSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  endpointResolutionOutcome.GetResult().AddPathSegments("/testsets/");
+  endpointResolutionOutcome.GetResult().AddPathSegment(request.GetTestSetId());
+  return UpdateTestSetOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_PUT, Aws::Auth::SIGV4_SIGNER));
 }
 

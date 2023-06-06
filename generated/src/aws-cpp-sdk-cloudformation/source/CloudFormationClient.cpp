@@ -21,6 +21,7 @@
 #include <aws/cloudformation/CloudFormationClient.h>
 #include <aws/cloudformation/CloudFormationErrorMarshaller.h>
 #include <aws/cloudformation/CloudFormationEndpointProvider.h>
+#include <aws/cloudformation/model/ActivateOrganizationsAccessRequest.h>
 #include <aws/cloudformation/model/ActivateTypeRequest.h>
 #include <aws/cloudformation/model/BatchDescribeTypeConfigurationsRequest.h>
 #include <aws/cloudformation/model/CancelUpdateStackRequest.h>
@@ -29,6 +30,7 @@
 #include <aws/cloudformation/model/CreateStackRequest.h>
 #include <aws/cloudformation/model/CreateStackInstancesRequest.h>
 #include <aws/cloudformation/model/CreateStackSetRequest.h>
+#include <aws/cloudformation/model/DeactivateOrganizationsAccessRequest.h>
 #include <aws/cloudformation/model/DeactivateTypeRequest.h>
 #include <aws/cloudformation/model/DeleteChangeSetRequest.h>
 #include <aws/cloudformation/model/DeleteStackRequest.h>
@@ -38,6 +40,7 @@
 #include <aws/cloudformation/model/DescribeAccountLimitsRequest.h>
 #include <aws/cloudformation/model/DescribeChangeSetRequest.h>
 #include <aws/cloudformation/model/DescribeChangeSetHooksRequest.h>
+#include <aws/cloudformation/model/DescribeOrganizationsAccessRequest.h>
 #include <aws/cloudformation/model/DescribePublisherRequest.h>
 #include <aws/cloudformation/model/DescribeStackDriftDetectionStatusRequest.h>
 #include <aws/cloudformation/model/DescribeStackEventsRequest.h>
@@ -196,6 +199,7 @@ CloudFormationClient::CloudFormationClient(const std::shared_ptr<AWSCredentialsP
     /* End of legacy constructors due deprecation */
 CloudFormationClient::~CloudFormationClient()
 {
+  ShutdownSdkClient(this, -1);
 }
 
 std::shared_ptr<CloudFormationEndpointProviderBase>& CloudFormationClient::accessEndpointProvider()
@@ -238,8 +242,18 @@ Aws::String CloudFormationClient::ConvertRequestToPresignedUrl(const AmazonSeria
   return GeneratePresignedUrl(endpointResolutionOutcome.GetResult().GetURI(), Aws::Http::HttpMethod::HTTP_GET, region, 3600);
 }
 
+ActivateOrganizationsAccessOutcome CloudFormationClient::ActivateOrganizationsAccess(const ActivateOrganizationsAccessRequest& request) const
+{
+  AWS_OPERATION_GUARD(ActivateOrganizationsAccess);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, ActivateOrganizationsAccess, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ActivateOrganizationsAccess, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  return ActivateOrganizationsAccessOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST));
+}
+
 ActivateTypeOutcome CloudFormationClient::ActivateType(const ActivateTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(ActivateType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ActivateType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ActivateType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -248,6 +262,7 @@ ActivateTypeOutcome CloudFormationClient::ActivateType(const ActivateTypeRequest
 
 BatchDescribeTypeConfigurationsOutcome CloudFormationClient::BatchDescribeTypeConfigurations(const BatchDescribeTypeConfigurationsRequest& request) const
 {
+  AWS_OPERATION_GUARD(BatchDescribeTypeConfigurations);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, BatchDescribeTypeConfigurations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, BatchDescribeTypeConfigurations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -256,6 +271,7 @@ BatchDescribeTypeConfigurationsOutcome CloudFormationClient::BatchDescribeTypeCo
 
 CancelUpdateStackOutcome CloudFormationClient::CancelUpdateStack(const CancelUpdateStackRequest& request) const
 {
+  AWS_OPERATION_GUARD(CancelUpdateStack);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CancelUpdateStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CancelUpdateStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -264,6 +280,7 @@ CancelUpdateStackOutcome CloudFormationClient::CancelUpdateStack(const CancelUpd
 
 ContinueUpdateRollbackOutcome CloudFormationClient::ContinueUpdateRollback(const ContinueUpdateRollbackRequest& request) const
 {
+  AWS_OPERATION_GUARD(ContinueUpdateRollback);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ContinueUpdateRollback, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ContinueUpdateRollback, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -272,6 +289,7 @@ ContinueUpdateRollbackOutcome CloudFormationClient::ContinueUpdateRollback(const
 
 CreateChangeSetOutcome CloudFormationClient::CreateChangeSet(const CreateChangeSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateChangeSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -280,6 +298,7 @@ CreateChangeSetOutcome CloudFormationClient::CreateChangeSet(const CreateChangeS
 
 CreateStackOutcome CloudFormationClient::CreateStack(const CreateStackRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateStack);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -288,6 +307,7 @@ CreateStackOutcome CloudFormationClient::CreateStack(const CreateStackRequest& r
 
 CreateStackInstancesOutcome CloudFormationClient::CreateStackInstances(const CreateStackInstancesRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateStackInstances);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -296,14 +316,25 @@ CreateStackInstancesOutcome CloudFormationClient::CreateStackInstances(const Cre
 
 CreateStackSetOutcome CloudFormationClient::CreateStackSet(const CreateStackSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(CreateStackSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, CreateStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, CreateStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
   return CreateStackSetOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST));
 }
 
+DeactivateOrganizationsAccessOutcome CloudFormationClient::DeactivateOrganizationsAccess(const DeactivateOrganizationsAccessRequest& request) const
+{
+  AWS_OPERATION_GUARD(DeactivateOrganizationsAccess);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeactivateOrganizationsAccess, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeactivateOrganizationsAccess, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  return DeactivateOrganizationsAccessOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST));
+}
+
 DeactivateTypeOutcome CloudFormationClient::DeactivateType(const DeactivateTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeactivateType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeactivateType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeactivateType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -312,6 +343,7 @@ DeactivateTypeOutcome CloudFormationClient::DeactivateType(const DeactivateTypeR
 
 DeleteChangeSetOutcome CloudFormationClient::DeleteChangeSet(const DeleteChangeSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteChangeSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeleteChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -320,6 +352,7 @@ DeleteChangeSetOutcome CloudFormationClient::DeleteChangeSet(const DeleteChangeS
 
 DeleteStackOutcome CloudFormationClient::DeleteStack(const DeleteStackRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteStack);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeleteStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -328,6 +361,7 @@ DeleteStackOutcome CloudFormationClient::DeleteStack(const DeleteStackRequest& r
 
 DeleteStackInstancesOutcome CloudFormationClient::DeleteStackInstances(const DeleteStackInstancesRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteStackInstances);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeleteStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -336,6 +370,7 @@ DeleteStackInstancesOutcome CloudFormationClient::DeleteStackInstances(const Del
 
 DeleteStackSetOutcome CloudFormationClient::DeleteStackSet(const DeleteStackSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeleteStackSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeleteStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeleteStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -344,6 +379,7 @@ DeleteStackSetOutcome CloudFormationClient::DeleteStackSet(const DeleteStackSetR
 
 DeregisterTypeOutcome CloudFormationClient::DeregisterType(const DeregisterTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(DeregisterType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DeregisterType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DeregisterType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -352,6 +388,7 @@ DeregisterTypeOutcome CloudFormationClient::DeregisterType(const DeregisterTypeR
 
 DescribeAccountLimitsOutcome CloudFormationClient::DescribeAccountLimits(const DescribeAccountLimitsRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeAccountLimits);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeAccountLimits, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeAccountLimits, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -360,6 +397,7 @@ DescribeAccountLimitsOutcome CloudFormationClient::DescribeAccountLimits(const D
 
 DescribeChangeSetOutcome CloudFormationClient::DescribeChangeSet(const DescribeChangeSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeChangeSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -368,14 +406,25 @@ DescribeChangeSetOutcome CloudFormationClient::DescribeChangeSet(const DescribeC
 
 DescribeChangeSetHooksOutcome CloudFormationClient::DescribeChangeSetHooks(const DescribeChangeSetHooksRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeChangeSetHooks);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeChangeSetHooks, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeChangeSetHooks, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
   return DescribeChangeSetHooksOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST));
 }
 
+DescribeOrganizationsAccessOutcome CloudFormationClient::DescribeOrganizationsAccess(const DescribeOrganizationsAccessRequest& request) const
+{
+  AWS_OPERATION_GUARD(DescribeOrganizationsAccess);
+  AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeOrganizationsAccess, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
+  ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
+  AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeOrganizationsAccess, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
+  return DescribeOrganizationsAccessOutcome(MakeRequest(request, endpointResolutionOutcome.GetResult(), Aws::Http::HttpMethod::HTTP_POST));
+}
+
 DescribePublisherOutcome CloudFormationClient::DescribePublisher(const DescribePublisherRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribePublisher);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribePublisher, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribePublisher, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -384,6 +433,7 @@ DescribePublisherOutcome CloudFormationClient::DescribePublisher(const DescribeP
 
 DescribeStackDriftDetectionStatusOutcome CloudFormationClient::DescribeStackDriftDetectionStatus(const DescribeStackDriftDetectionStatusRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackDriftDetectionStatus);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackDriftDetectionStatus, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackDriftDetectionStatus, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -392,6 +442,7 @@ DescribeStackDriftDetectionStatusOutcome CloudFormationClient::DescribeStackDrif
 
 DescribeStackEventsOutcome CloudFormationClient::DescribeStackEvents(const DescribeStackEventsRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackEvents);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackEvents, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackEvents, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -400,6 +451,7 @@ DescribeStackEventsOutcome CloudFormationClient::DescribeStackEvents(const Descr
 
 DescribeStackInstanceOutcome CloudFormationClient::DescribeStackInstance(const DescribeStackInstanceRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackInstance);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackInstance, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackInstance, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -408,6 +460,7 @@ DescribeStackInstanceOutcome CloudFormationClient::DescribeStackInstance(const D
 
 DescribeStackResourceOutcome CloudFormationClient::DescribeStackResource(const DescribeStackResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -416,6 +469,7 @@ DescribeStackResourceOutcome CloudFormationClient::DescribeStackResource(const D
 
 DescribeStackResourceDriftsOutcome CloudFormationClient::DescribeStackResourceDrifts(const DescribeStackResourceDriftsRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackResourceDrifts);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackResourceDrifts, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackResourceDrifts, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -424,6 +478,7 @@ DescribeStackResourceDriftsOutcome CloudFormationClient::DescribeStackResourceDr
 
 DescribeStackResourcesOutcome CloudFormationClient::DescribeStackResources(const DescribeStackResourcesRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackResources);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackResources, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackResources, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -432,6 +487,7 @@ DescribeStackResourcesOutcome CloudFormationClient::DescribeStackResources(const
 
 DescribeStackSetOutcome CloudFormationClient::DescribeStackSet(const DescribeStackSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -440,6 +496,7 @@ DescribeStackSetOutcome CloudFormationClient::DescribeStackSet(const DescribeSta
 
 DescribeStackSetOperationOutcome CloudFormationClient::DescribeStackSetOperation(const DescribeStackSetOperationRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStackSetOperation);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStackSetOperation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStackSetOperation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -448,6 +505,7 @@ DescribeStackSetOperationOutcome CloudFormationClient::DescribeStackSetOperation
 
 DescribeStacksOutcome CloudFormationClient::DescribeStacks(const DescribeStacksRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeStacks);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeStacks, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeStacks, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -456,6 +514,7 @@ DescribeStacksOutcome CloudFormationClient::DescribeStacks(const DescribeStacksR
 
 DescribeTypeOutcome CloudFormationClient::DescribeType(const DescribeTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -464,6 +523,7 @@ DescribeTypeOutcome CloudFormationClient::DescribeType(const DescribeTypeRequest
 
 DescribeTypeRegistrationOutcome CloudFormationClient::DescribeTypeRegistration(const DescribeTypeRegistrationRequest& request) const
 {
+  AWS_OPERATION_GUARD(DescribeTypeRegistration);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DescribeTypeRegistration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DescribeTypeRegistration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -472,6 +532,7 @@ DescribeTypeRegistrationOutcome CloudFormationClient::DescribeTypeRegistration(c
 
 DetectStackDriftOutcome CloudFormationClient::DetectStackDrift(const DetectStackDriftRequest& request) const
 {
+  AWS_OPERATION_GUARD(DetectStackDrift);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DetectStackDrift, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DetectStackDrift, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -480,6 +541,7 @@ DetectStackDriftOutcome CloudFormationClient::DetectStackDrift(const DetectStack
 
 DetectStackResourceDriftOutcome CloudFormationClient::DetectStackResourceDrift(const DetectStackResourceDriftRequest& request) const
 {
+  AWS_OPERATION_GUARD(DetectStackResourceDrift);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DetectStackResourceDrift, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DetectStackResourceDrift, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -488,6 +550,7 @@ DetectStackResourceDriftOutcome CloudFormationClient::DetectStackResourceDrift(c
 
 DetectStackSetDriftOutcome CloudFormationClient::DetectStackSetDrift(const DetectStackSetDriftRequest& request) const
 {
+  AWS_OPERATION_GUARD(DetectStackSetDrift);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, DetectStackSetDrift, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, DetectStackSetDrift, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -496,6 +559,7 @@ DetectStackSetDriftOutcome CloudFormationClient::DetectStackSetDrift(const Detec
 
 EstimateTemplateCostOutcome CloudFormationClient::EstimateTemplateCost(const EstimateTemplateCostRequest& request) const
 {
+  AWS_OPERATION_GUARD(EstimateTemplateCost);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, EstimateTemplateCost, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, EstimateTemplateCost, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -504,6 +568,7 @@ EstimateTemplateCostOutcome CloudFormationClient::EstimateTemplateCost(const Est
 
 ExecuteChangeSetOutcome CloudFormationClient::ExecuteChangeSet(const ExecuteChangeSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(ExecuteChangeSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ExecuteChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ExecuteChangeSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -512,6 +577,7 @@ ExecuteChangeSetOutcome CloudFormationClient::ExecuteChangeSet(const ExecuteChan
 
 GetStackPolicyOutcome CloudFormationClient::GetStackPolicy(const GetStackPolicyRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetStackPolicy);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetStackPolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, GetStackPolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -520,6 +586,7 @@ GetStackPolicyOutcome CloudFormationClient::GetStackPolicy(const GetStackPolicyR
 
 GetTemplateOutcome CloudFormationClient::GetTemplate(const GetTemplateRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetTemplate);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetTemplate, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, GetTemplate, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -528,6 +595,7 @@ GetTemplateOutcome CloudFormationClient::GetTemplate(const GetTemplateRequest& r
 
 GetTemplateSummaryOutcome CloudFormationClient::GetTemplateSummary(const GetTemplateSummaryRequest& request) const
 {
+  AWS_OPERATION_GUARD(GetTemplateSummary);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, GetTemplateSummary, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, GetTemplateSummary, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -536,6 +604,7 @@ GetTemplateSummaryOutcome CloudFormationClient::GetTemplateSummary(const GetTemp
 
 ImportStacksToStackSetOutcome CloudFormationClient::ImportStacksToStackSet(const ImportStacksToStackSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(ImportStacksToStackSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ImportStacksToStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ImportStacksToStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -544,6 +613,7 @@ ImportStacksToStackSetOutcome CloudFormationClient::ImportStacksToStackSet(const
 
 ListChangeSetsOutcome CloudFormationClient::ListChangeSets(const ListChangeSetsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListChangeSets);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListChangeSets, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListChangeSets, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -552,6 +622,7 @@ ListChangeSetsOutcome CloudFormationClient::ListChangeSets(const ListChangeSetsR
 
 ListExportsOutcome CloudFormationClient::ListExports(const ListExportsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListExports);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListExports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListExports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -560,6 +631,7 @@ ListExportsOutcome CloudFormationClient::ListExports(const ListExportsRequest& r
 
 ListImportsOutcome CloudFormationClient::ListImports(const ListImportsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListImports);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListImports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListImports, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -568,6 +640,7 @@ ListImportsOutcome CloudFormationClient::ListImports(const ListImportsRequest& r
 
 ListStackInstancesOutcome CloudFormationClient::ListStackInstances(const ListStackInstancesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListStackInstances);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -576,6 +649,7 @@ ListStackInstancesOutcome CloudFormationClient::ListStackInstances(const ListSta
 
 ListStackResourcesOutcome CloudFormationClient::ListStackResources(const ListStackResourcesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListStackResources);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListStackResources, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListStackResources, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -584,6 +658,7 @@ ListStackResourcesOutcome CloudFormationClient::ListStackResources(const ListSta
 
 ListStackSetOperationResultsOutcome CloudFormationClient::ListStackSetOperationResults(const ListStackSetOperationResultsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListStackSetOperationResults);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListStackSetOperationResults, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListStackSetOperationResults, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -592,6 +667,7 @@ ListStackSetOperationResultsOutcome CloudFormationClient::ListStackSetOperationR
 
 ListStackSetOperationsOutcome CloudFormationClient::ListStackSetOperations(const ListStackSetOperationsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListStackSetOperations);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListStackSetOperations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListStackSetOperations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -600,6 +676,7 @@ ListStackSetOperationsOutcome CloudFormationClient::ListStackSetOperations(const
 
 ListStackSetsOutcome CloudFormationClient::ListStackSets(const ListStackSetsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListStackSets);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListStackSets, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListStackSets, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -608,6 +685,7 @@ ListStackSetsOutcome CloudFormationClient::ListStackSets(const ListStackSetsRequ
 
 ListStacksOutcome CloudFormationClient::ListStacks(const ListStacksRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListStacks);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListStacks, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListStacks, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -616,6 +694,7 @@ ListStacksOutcome CloudFormationClient::ListStacks(const ListStacksRequest& requ
 
 ListTypeRegistrationsOutcome CloudFormationClient::ListTypeRegistrations(const ListTypeRegistrationsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListTypeRegistrations);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTypeRegistrations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListTypeRegistrations, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -624,6 +703,7 @@ ListTypeRegistrationsOutcome CloudFormationClient::ListTypeRegistrations(const L
 
 ListTypeVersionsOutcome CloudFormationClient::ListTypeVersions(const ListTypeVersionsRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListTypeVersions);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTypeVersions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListTypeVersions, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -632,6 +712,7 @@ ListTypeVersionsOutcome CloudFormationClient::ListTypeVersions(const ListTypeVer
 
 ListTypesOutcome CloudFormationClient::ListTypes(const ListTypesRequest& request) const
 {
+  AWS_OPERATION_GUARD(ListTypes);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ListTypes, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ListTypes, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -640,6 +721,7 @@ ListTypesOutcome CloudFormationClient::ListTypes(const ListTypesRequest& request
 
 PublishTypeOutcome CloudFormationClient::PublishType(const PublishTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(PublishType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, PublishType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, PublishType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -648,6 +730,7 @@ PublishTypeOutcome CloudFormationClient::PublishType(const PublishTypeRequest& r
 
 RecordHandlerProgressOutcome CloudFormationClient::RecordHandlerProgress(const RecordHandlerProgressRequest& request) const
 {
+  AWS_OPERATION_GUARD(RecordHandlerProgress);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, RecordHandlerProgress, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, RecordHandlerProgress, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -656,6 +739,7 @@ RecordHandlerProgressOutcome CloudFormationClient::RecordHandlerProgress(const R
 
 RegisterPublisherOutcome CloudFormationClient::RegisterPublisher(const RegisterPublisherRequest& request) const
 {
+  AWS_OPERATION_GUARD(RegisterPublisher);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, RegisterPublisher, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, RegisterPublisher, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -664,6 +748,7 @@ RegisterPublisherOutcome CloudFormationClient::RegisterPublisher(const RegisterP
 
 RegisterTypeOutcome CloudFormationClient::RegisterType(const RegisterTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(RegisterType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, RegisterType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, RegisterType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -672,6 +757,7 @@ RegisterTypeOutcome CloudFormationClient::RegisterType(const RegisterTypeRequest
 
 RollbackStackOutcome CloudFormationClient::RollbackStack(const RollbackStackRequest& request) const
 {
+  AWS_OPERATION_GUARD(RollbackStack);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, RollbackStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, RollbackStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -680,6 +766,7 @@ RollbackStackOutcome CloudFormationClient::RollbackStack(const RollbackStackRequ
 
 SetStackPolicyOutcome CloudFormationClient::SetStackPolicy(const SetStackPolicyRequest& request) const
 {
+  AWS_OPERATION_GUARD(SetStackPolicy);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, SetStackPolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, SetStackPolicy, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -688,6 +775,7 @@ SetStackPolicyOutcome CloudFormationClient::SetStackPolicy(const SetStackPolicyR
 
 SetTypeConfigurationOutcome CloudFormationClient::SetTypeConfiguration(const SetTypeConfigurationRequest& request) const
 {
+  AWS_OPERATION_GUARD(SetTypeConfiguration);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, SetTypeConfiguration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, SetTypeConfiguration, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -696,6 +784,7 @@ SetTypeConfigurationOutcome CloudFormationClient::SetTypeConfiguration(const Set
 
 SetTypeDefaultVersionOutcome CloudFormationClient::SetTypeDefaultVersion(const SetTypeDefaultVersionRequest& request) const
 {
+  AWS_OPERATION_GUARD(SetTypeDefaultVersion);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, SetTypeDefaultVersion, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, SetTypeDefaultVersion, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -704,6 +793,7 @@ SetTypeDefaultVersionOutcome CloudFormationClient::SetTypeDefaultVersion(const S
 
 SignalResourceOutcome CloudFormationClient::SignalResource(const SignalResourceRequest& request) const
 {
+  AWS_OPERATION_GUARD(SignalResource);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, SignalResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, SignalResource, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -712,6 +802,7 @@ SignalResourceOutcome CloudFormationClient::SignalResource(const SignalResourceR
 
 StopStackSetOperationOutcome CloudFormationClient::StopStackSetOperation(const StopStackSetOperationRequest& request) const
 {
+  AWS_OPERATION_GUARD(StopStackSetOperation);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, StopStackSetOperation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, StopStackSetOperation, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -720,6 +811,7 @@ StopStackSetOperationOutcome CloudFormationClient::StopStackSetOperation(const S
 
 TestTypeOutcome CloudFormationClient::TestType(const TestTypeRequest& request) const
 {
+  AWS_OPERATION_GUARD(TestType);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, TestType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, TestType, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -728,6 +820,7 @@ TestTypeOutcome CloudFormationClient::TestType(const TestTypeRequest& request) c
 
 UpdateStackOutcome CloudFormationClient::UpdateStack(const UpdateStackRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateStack);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, UpdateStack, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -736,6 +829,7 @@ UpdateStackOutcome CloudFormationClient::UpdateStack(const UpdateStackRequest& r
 
 UpdateStackInstancesOutcome CloudFormationClient::UpdateStackInstances(const UpdateStackInstancesRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateStackInstances);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, UpdateStackInstances, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -744,6 +838,7 @@ UpdateStackInstancesOutcome CloudFormationClient::UpdateStackInstances(const Upd
 
 UpdateStackSetOutcome CloudFormationClient::UpdateStackSet(const UpdateStackSetRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateStackSet);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, UpdateStackSet, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -752,6 +847,7 @@ UpdateStackSetOutcome CloudFormationClient::UpdateStackSet(const UpdateStackSetR
 
 UpdateTerminationProtectionOutcome CloudFormationClient::UpdateTerminationProtection(const UpdateTerminationProtectionRequest& request) const
 {
+  AWS_OPERATION_GUARD(UpdateTerminationProtection);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, UpdateTerminationProtection, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, UpdateTerminationProtection, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
@@ -760,6 +856,7 @@ UpdateTerminationProtectionOutcome CloudFormationClient::UpdateTerminationProtec
 
 ValidateTemplateOutcome CloudFormationClient::ValidateTemplate(const ValidateTemplateRequest& request) const
 {
+  AWS_OPERATION_GUARD(ValidateTemplate);
   AWS_OPERATION_CHECK_PTR(m_endpointProvider, ValidateTemplate, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE);
   ResolveEndpointOutcome endpointResolutionOutcome = m_endpointProvider->ResolveEndpoint(request.GetEndpointContextParams());
   AWS_OPERATION_CHECK_SUCCESS(endpointResolutionOutcome, ValidateTemplate, CoreErrors, CoreErrors::ENDPOINT_RESOLUTION_FAILURE, endpointResolutionOutcome.GetError().GetMessage());
